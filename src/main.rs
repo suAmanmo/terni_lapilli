@@ -93,13 +93,13 @@ impl Game {
     }
 
     fn check_win(&self) -> bool {
-        let directions = [(0, 1), (1, 0), (1, 1)];
+        let directions = [(0, 1), (1, 0), (1, 1), (1, -1)];
         for row in 0..3 {
             for col in 0..3 {
                 if self.grid[row][col] != Cell::Empty
                     && directions
                         .iter()
-                        .any(|&(dr, dc)| self.check_line(row, col, dr, dc))
+                        .any(|&(dr, dc)| self.check_line(row as isize, col as isize, dr, dc))
                 {
                     return true;
                 }
@@ -107,13 +107,13 @@ impl Game {
         }
         false
     }
-
-    fn check_line(&self, row: usize, col: usize, dr: usize, dc: usize) -> bool {
+    
+    fn check_line(&self, row: isize, col: isize, dr: isize, dc: isize) -> bool {
         let (mut r, mut c) = (row, col);
         for _ in 0..2 {
             r += dr;
             c += dc;
-            if r >= 3 || c >= 3 || self.grid[r][c] != self.grid[row][col] {
+            if r < 0 || r >= 3 || c < 0 || c >= 3 || self.grid[r as usize][c as usize] != self.grid[row as usize][col as usize] {
                 return false;
             }
         }
